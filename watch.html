@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Movie</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #1e1e2f, #2a2a40);
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #222;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .container img {
+      border-radius: 12px;
+      margin: 1rem 0;
+      max-width: 250px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #00d4ff;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #ff9800;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="movieTitle">Loading...</h1>
+    <img id="moviePoster" src="" alt="Movie Poster">
+    <p id="moviePlot"></p>
+    <p id="movieYear"></p>
+    <p id="movieGenre"></p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const movieId = params.get('id');
+    const apiKey = '75857bbb';
+
+    if (movieId) {
+      fetch(`https://www.omdbapi.com/?apikey=75857bbb&i=${movieId}&plot=full`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.Response === "True") {
+            document.getElementById('movieTitle').textContent = data.Title;
+            document.getElementById('moviePoster').src = data.Poster !== 'N/A' ? data.Poster : 'placeholder.jpg';
+            document.getElementById('moviePlot').textContent = data.Plot;
+            document.getElementById('movieYear').innerHTML = `<span class="highlight">Year:</span> ${data.Year}`;
+            document.getElementById('movieGenre').innerHTML = `<span class="highlight">Genre:</span> ${data.Genre}`;
+          } else {
+            document.getElementById('movieTitle').textContent = 'Movie not found.';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching movie details:', error);
+          document.getElementById('movieTitle').textContent = 'Error loading movie.';
+        });
+    } else {
+      document.getElementById('movieTitle').textContent = 'No movie selected.';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Prevent description overflow */
+    .movie-card p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    /* Movie card layout */
+    .movie-card {
+      position: relative;
+      display: inline-block;
+      width: 200px;
+      margin: 10px;
+      padding: 10px;
+      background: #222;
+      border-radius: 8px;
+      color: white;
+    }
+
+    /* Favorite icon */
+    .favorite-icon {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #bbb;
+    }
+
+    .favorite-icon.active {
+      color: gold;
+    }
+
+    /* Favorites section */
+    #favorites {
+      margin-top: 30px;
+      padding: 10px;
+    }
+
+    #favoritesHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #clearFavorites {
+      padding: 5px 10px;
+      font-size: 14px;
+      cursor: pointer;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body id="bodyStyle" class="bodyStyle">
+
+  <h2>Search Results</h2>
+  <div id="results"></div>
+
+  <!-- Favorites Section -->
+  <div id="favoritesSection">
+    <h2 id="favoritesHeader">
+      ⭐ Favorites 
+      <button id="clearFavorites">Clear Favorites</button>
+    </h2>
+    <div id="favorites"></div>
+  </div>
+
+  <div id="playerContainer" style="display:none; margin-top:30px; text-align:center;">
+    <h3 id="playerTitle"></h3>
+    <video id="moviePlayer" width="640" controls>
+      <source src="sample.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const movie = params.get('movie');
+    const apiKey = '75857bbb';
+
+    if (movie) {
+      fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${encodeURIComponent(movie)}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultsDiv = document.getElementById('results');
+          if (data.Response === 'True') {
+            data.Search.forEach((movie, index) => {
+              // For each search result, fetch full details
+              fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.imdbID}&plot=short`)
+                .then(res => res.json())
+                .then(details => {
+                  const card = document.createElement('div');
+                  card.classList.add('movie-card');
+
+                  card.innerHTML = `
+                    <span class="favorite-icon" onclick="toggleFavorite('${details.imdbID}', this)">&#9733;</span>
+                    <h3>${details.Title} (${details.Year})</h3>
+                    <img src="${details.Poster !== 'N/A' ? details.Poster : 'placeholder.jpg'}" width="150">
+                    <p>${details.Plot}</p>
+                    <button class="watch-btn" onclick="togglePlayer(${index}, '${details.Title}')">Watch</button>
+                    <div class="player-container" id="player-${index}" style="display:none;">
+                      <h4>Now Playing: ${details.Title}</h4>
+                      <video width="100%" controls>
+                        <source src="sample.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  `;
+                  resultsDiv.appendChild(card);
+                });
+            });
+          } else {
+            resultsDiv.innerHTML = `<p>No results found for "${movie}".</p>`;
+          }
+        });
+    }
+
+    function togglePlayer(index, title) {
+      const player = document.getElementById(`player-${index}`);
+      player.style.display = player.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function showPlayer(title) {
+      document.getElementById('playerTitle').textContent = `Now Playing: ${title}`;
+      document.getElementById('playerContainer').style.display = 'block';
+    }
+
+    // ======================
+    // Favorites Functionality
+    // ======================
+    function toggleFavorite(imdbID, el) {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+      if (favorites.includes(imdbID)) {
+        favorites = favorites.filter(id => id !== imdbID);
+        el.classList.remove('active');
+      } else {
+        favorites.push(imdbID);
+        el.classList.add('active');
+      }
+
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      const favoritesDiv = document.getElementById('favorites');
+      favoritesDiv.innerHTML = '';
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+      favorites.forEach((id, index) => {
+        fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${id}&plot=short`)
+          .then(res => res.json())
+          .then(details => {
+            const card = document.createElement('div');
+            card.classList.add('movie-card');
+
+            card.innerHTML = `
+              <span class="favorite-icon active" onclick="toggleFavorite('${details.imdbID}', this)">&#9733;</span>
+              <h3>${details.Title} (${details.Year})</h3>
+              <img src="${details.Poster !== 'N/A' ? details.Poster : 'placeholder.jpg'}" width="150">
+              <p>${details.Plot}</p>
+              <button class="watch-btn" onclick="togglePlayer('fav-${index}', '${details.Title}')">Watch</button>
+              <div class="player-container" id="player-fav-${index}" style="display:none;">
+                <h4>Now Playing: ${details.Title}</h4>
+                <video width="100%" controls>
+                  <source src="sample.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            `;
+            favoritesDiv.appendChild(card);
+          });
+      });
+    }
+
+    // Clear favorites
+    document.getElementById('clearFavorites').addEventListener('click', () => {
+      localStorage.removeItem('favorites');
+      renderFavorites();
+    });
+
+    // Load favorites on page load
+    document.addEventListener('DOMContentLoaded', renderFavorites);
+  </script>
+
+</body>
+</html>

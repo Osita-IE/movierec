@@ -13,22 +13,51 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+        <!-- Profile Modal -->
+        <div id="profile-modal">
+        <div class="grid-container">
+            <img id="modal-pic" src="images/hector-reyes-PXjQaGxi4JA-unsplash.jpg" alt="Profile Picture">
+        </div>
+        <br><br>
+        <label for="upload-pic">Upload:</label>
+        <input type="file" id="upload-pic" accept="image/*">
+        <br><br>
+        <button style="background-color: tomato; color: whitesmoke; border-style: none; border-radius: 10px; width: 70px; cursor: pointer;" onclick="closeProfile()">Close</button>
+        </div>
+
     <div class="navbar-top">
         <div class="navbar-texts">
             <div class="logo-container"><h1 class="logo">MovieRec</h1></div>
             <div class="menu-container">
                 <div class="menu-list">
-                    <ul class="list-active">Home</ul>
-                    <ul class="list">Movies</ul>
-                    <ul class="list">Series</ul>
-                    <ul class="list">Trending</ul>
+
+                    <input type="text" id="searchInput" placeholder="Search for a movie" style="color: white;">
+                    <button id="searchButton" onclick="goToSearchPage()">Search</button>
+                    <div id="results"></div>
+
+                        <script>
+                            function goToSearchPage() {
+                                const query = document.getElementById('searchInput').value.trim();
+                                if (!query) {
+                                alert('Please enter a movie name');
+                                return;
+                                }
+                                window.location.href = `search.html?movie=${encodeURIComponent(query)}`;
+                            }
+                        </script>
+
                 </div>
             </div>
             <div class="profile-container">
-                <img class="profile-picture" src="images/erik-mclean-7sgU1jV8-iw-unsplash.jpg" alt="">
+                <img id="profile-pic" class="profile-picture" src="images/hector-reyes-PXjQaGxi4JA-unsplash.jpg" alt="Profile Picture">
                 <div class="profile-text-container">
                     <span>profile</span>
-                    <i class="fa-solid fa-caret-down"></i>
+                    <div class="dropdown-container">
+                        <i id="dropdown-icon" class="fa-solid fa-caret-down"></i>
+                        <div id="myDropdown" class="dropdown-content">
+                            <button id="logoutButton" style="display:none;">Logout</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="toggle">
                     <i class="fa-solid fa-sun toggle-icon"></i><i class="fa-solid fa-moon toggle-icon"></i>
@@ -38,65 +67,75 @@
         </div>
     </div>
 
-    <div class="navbar-left">
-            <i id="search-icon" class="left-menu-icons fa-solid fa-magnifying-glass">
-                <!-- <input id="searchbar" type="text"> -->
-            </i>
-            <i class="left-menu-icons fa-solid fa-house-chimney"></i>
-            <i class="left-menu-icons fa-solid fa-users"></i>
-            <i class="left-menu-icons fa-solid fa-bookmark"></i>
-            <i class="left-menu-icons fa-solid fa-tv"></i>
-            <i class="left-menu-icons fa-solid fa-hourglass-start"></i>
-            <i class="left-menu-icons fa-solid fa-cart-shopping"></i>
+        <div class="navbar-left">
+                <i id="homeButton" class="left-menu-icons fa-solid fa-house-chimney"></i>
+
+                <a href="#users-section" id="users-icon" style="cursor: pointer;">
+                    <i class="left-menu-icons fa-solid fa-users"></i>
+                </a>
+
+                <a href="#coming-soon" id="hourglass-icon" style="cursor: pointer;">
+                    <i class="left-menu-icons fa-solid fa-hourglass-start"></i>
+                </a>
+                <!-- <a href="#favorites" id="favoritesNavButton">
+                    <i class="left-menu-icons fa-solid fa-star"></i>
+                </a> -->
         </div>
     </div>
 
     <div class="container">
         <div class="content-container">
-            <div class="featured-container"
-            style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url('images/2149946317.jpg');">
-                <img class="featured-title" src="images/f-t-2.png" alt="">
-                <p class="featured-desc">
-                    <ul>Genre: Science fiction,mystery,thriller,tragedy</ul>
-                    <ul>Language: German</ul>
-                    <ul>Platform: Netflix</ul>
-                </p>
-                <button class="featured-button">WATCH</button>
-            </div>
+            
             <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <div class="featured-container"
+                style=" padding: 70px;">
+                <div class="big-box">
+                    <div class="big-box-text">
+                        <h1 style="font-size: 50px; font-family: 'Segoe UI'; margin-bottom: 20px;">Discover Amazing Movies</h1>
+                        <p>Explore our curated collection of the latest releases, classics, and hidden gems from around the world.</p>
+                    </div>
+                </div>
+                <!-- <img class="featured-title" src="images/f-t-2.png" alt=""> -->
+                <p class="featured-desc">
+
+            </div>
+
+                <h1 id="coming-soon" class="movie-list-title">COMING SOON!!!</h1>
                     <div class="movie-list-wrapper">
                         <div class="movie-list">
                             <div class="movie-list-item">
-                                <img class="movie-list-item-img" src="images/erik-mclean-7sgU1jV8-iw-unsplash.jpg" alt="">
-                                <span class="movie-list-item-title">Chucky</span>
+                                <img class="movie-list-item-img" src="images/b8520ea1873a4f0d87397ee6f436366b~tplv-photomode-image.jpeg" alt="">
+                                <span class="movie-list-item-title">Moana</span>
                             <p class="movie-list-item-desc">
-                                Genre: Horror, Slasher, Supernatural Thriller
-                                Directed by: Tom Holland
-                                Created by: Don Mancini
-                                Starring: Brad Dourif (voice of Chucky)
+                                Genre: Animated, Adventure, Musical 
+                                Directed by: John Musker & Ron Clements 
+                                Created by: Walt Disney Animation Studios 
+                                Starring: Auliʻi Cravalho (voice of Moana),<br> Dwayne Johnson (voice of Maui)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}" >Watch</button>
+
                         </div>
                         <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="images/42108364_8852084.jpg" alt="">
-                            <span class="movie-list-item-title">The Boy</span>
+                            <img class="movie-list-item-img" src="images/e35b071c62974e55928b6a5b8b5fdc9f~tplv-photomode-image.jpeg" alt="">
+                            <span class="movie-list-item-title">Dune</span>
                             <p class="movie-list-item-desc">
-                                Genre: Horror, Mystery, Thriller
-                                Directed by: William Brent Bell
-                                Starring: Lauren Cohan, Rupert Evans, James Russell
+                                Genre: Science Fiction, Epic, Political Thriller 
+                                Directed by: Denis Villeneuve 
+                                Created by: Based on the novel Dune Messiah by Frank Herbert 
+                                Starring: Timothée Chalamet (Paul Atreides),<br> Zendaya (Chani), Florence Pugh (Princess Irulan), <br>Jason Momoa (Duncan Idaho), Robert Pattinson (Scytale, rumored)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="images/71679266_9741215.jpg" alt="">
-                            <span class="movie-list-item-title">Make a Bold Move</span>
+                            <img class="movie-list-item-img" src="images/f6291f38783042e1927c8a3ca518d4e9~tplv-photomode-image.jpeg" alt="">
+                            <span class="movie-list-item-title">The Legend of Aang</span>
                             <p class="movie-list-item-desc">
-                                Genre: Drama / Thriller / Inspirational 
-                                Directed by: (Your name here?) 
-                                Starring: A rising entrepreneur, a disillusioned artist, and a high-stakes investor
+                                Genre: Animated, Fantasy, Action-Adventure 
+                                Directed by: Lauren Montgomery (co-directed by William Mata & Steve Ahn) 
+                                Created by: Based on Avatar: The Last Airbender <br> by Michael Dante DiMartino & Bryan Konietzko 
+                                Starring: Eric Nam (voice of Aang), Jessica Matten (Katara),<br>  Román Zaragoza (Sokka), Dionne Quan (Toph), <br> Steven Yeun (Zuko), Dave Bautista (villain)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754699110491.jpg" alt="">
@@ -107,43 +146,56 @@
                                 Release Date: December 17, 20272
                                 Starring: Vanessa Kirby, Pedro Pascal,Joseph Quinn,Robert Downey Jr.(as Doctor Doom)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="images/instagram-1754700094155.jpg" alt="">
-                            <span class="movie-list-item-title">Evil Dead Rise</span>
+                            <img class="movie-list-item-img" src="images/51bf412fef2e484f8a7eaee33d8da6a3~tplv-photomode-image.jpeg" alt="">
+                            <span class="movie-list-item-title">ClayFace</span>
                             <p class="movie-list-item-desc">
-                                Genre: Supernatural Horror
-                                Directed by: Lee Cronin
-                                Starring: Lily Sullivan, Alyssa Sutherland, Morgan Davies, Gabrielle Echols, Nell Fisher
+                                Genre: Horror, Superhero, Psychological Thriller 
+                                Directed by: James Watkins 
+                                Created by: Based on DC Comics characters; 
+                                screenplay by Mike Flanagan & Hossein Amini 
+                                Starring: Tom Rhys Harries (Clayface), Naomi Ackie, Eddie Marsan
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="images/42108364_8852084.jpg" alt="">
-                            <span class="movie-list-item-title">Night Apocalypse</span>
+                            <img class="movie-list-item-img" src="images/snaptik_7533202780161330454_2.jpeg" alt="">
+                            <span class="movie-list-item-title">The Hunger Games; <br> Sunrise of the reaping</span>
                             <p class="movie-list-item-desc">
-                                
+                                Genre: Dystopian, Action, Political Thriller 
+                                Directed by: Francis Lawrence 
+                                Created by: Based on the novel Sunrise on the Reaping by Suzanne Collins 
+                                Starring: Joseph Zada (Haymitch Abernathy), Mckenna Grace (Maysilee Donner),
+                                <br> Whitney Peak (Lenore Dove Baird), Jesse Plemons (Plutarch Heavensbee),
+                                <br> Ralph Fiennes (President Snow), Elle Fanning (Effie Trinket),
+                                <br> Kieran Culkin (Caesar Flickerman), Maya Hawke (Wiress),
+                                <br> Billy Porter (Magno Stift), Glenn Close (Drusilla Sickle)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="images/187273151_10534149.jpg" alt="">
-                            <span class="movie-list-item-title">Night Apocalypse</span>
+                            <img class="movie-list-item-img" src="images/441f915f88124681a6f406bb4088fb7d~tplv-photomode-image.jpeg" alt="">
+                            <span class="movie-list-item-title">Avengers Doomsday</span>
                             <p class="movie-list-item-desc">
-                                Genre: Animated Horror / Comedy / Adventure
-                                Directed by: Rodrigo Perez-Castro & Ricardo Curtis
-                                Inspired by: A concept from horror legend Clive Barker
-                                Starring (voices): Gabbi Kosmidis, David Harbour, Paul Sun-Hyung Lee, Scott Thompson
+                               Genre: Superhero, Action, Sci-Fi, Epic Thriller 
+                               Directed by: Anthony Russo & Joe Russo 
+                               Created by: Based on Avengers by Stan Lee & Jack Kirby; 
+                               Screenplay by Michael Waldron & Stephen McFeely 
+                               Starring: Chris Hemsworth (Thor), Anthony Mackie (Captain America),
+                               <br> Vanessa Kirby (Sue Storm), Simu Liu (Shang-Chi),
+                               <br> Florence Pugh (Yelena Belova), Tom Hiddleston (Loki),
+                               <br> Pedro Pascal (Reed Richards), Robert Downey Jr. (Doctor Doom)
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                     </div>
                     <i class="fas fa-chevron-right arrow"></i>
                 </div>
             </div>
             <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <h1 class="movie-list-title">CLASSICS</h1>
                 <div class="movie-list-wrapper">
                     <div class="movie-list">
                         <div class="movie-list-item">
@@ -155,7 +207,7 @@
                                 Inspired by: A concept from horror legend Clive Barker
                                 Starring (voices): Gabbi Kosmidis, David Harbour, Paul Sun-Hyung Lee, Scott Thompson
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/9.jpg" alt="">
@@ -166,7 +218,7 @@
                                 Based on: The Hobbit by J.R.R. Tolkien
                                 Starring: Martin Freeman, Ian McKellen, Richard Armitage, Cate Blanchett
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/8.jpg" alt="">
@@ -176,7 +228,7 @@
                                 Directed by: Joseph Kosinski
                                 Starring: Tom Cruise, Morgan Freeman, Olga Kurylenko, Andrea Riseborough, Melissa Leo
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/7.jpg" alt="">
@@ -186,7 +238,7 @@
                                 Directed by: Ava Renner 
                                 Starring: John Boyega, Florence Pugh, Simu Liu, and Idris Elba
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/6.jpg" alt="">
@@ -196,7 +248,7 @@
                                 Directed by: Brad Peyton
                                 Starring: Dwayne Johnson, Naomie Harris, Jeffrey Dean Morgan, Malin Akerman
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/5.jpg" alt="">
@@ -206,7 +258,7 @@
                                 Directed by: Joss Whedon
                                 Starring: Robert Downey Jr.,Chris Evans,Scarlett Johansson,Chris Hemsworth,Samuel L. Jackson
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/4.jpg" alt="">
@@ -216,7 +268,7 @@
                                 Directed by: Sam Mendes
                                 Starring: George MacKay, Dean-Charles Chapman, Colin Firth, Benedict Cumberbatch
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                     </div>
                     <i class="fas fa-chevron-right arrow"></i>
@@ -224,16 +276,10 @@
             </div>
             <div class="featured-content"
                 style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url('img/f-2.jpg');">
-                <!-- <img class="featured-title" src="img/f-t-2.png" alt="">
-                <p class="featured-desc">
-                    Genre: Science fiction, mystery, thriller, tragedy
-                    Language: German
-                    Platform: Netflix
-                </p> -->
-                <!-- <button class="featured-button">WATCH</button> -->
+                
             </div>
             <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <h1 class="movie-list-title">ADVENTURE</h1>
                 <div class="movie-list-wrapper">
                     <div class="movie-list">
                         <div class="movie-list-item">
@@ -244,7 +290,7 @@
                                 Directed by: Harris Done
                                 Starring: Luke Perry, Martin Sheen, Robert Knott
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/2.jpeg" alt="">
@@ -254,7 +300,7 @@
                                 Created by: George Lucas
                                 Starring: Mark Hamill, Harrison Ford, Carrie Fisher, Alec Guinness
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/9132901_4094803.jpg" alt="">
@@ -265,7 +311,7 @@
                                 Written by: Victoria Vinuesa
                                 Starring: Toni Collette, Andy Garcia, Alex Pettyfer, Eva De Dominici
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/7.jpg" alt="">
@@ -275,7 +321,7 @@
                                 Directed by: Ava Renner 
                                 Starring: John Boyega, Florence Pugh, Simu Liu, and Idris Elba
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/9.jpg" alt="">
@@ -286,7 +332,7 @@
                                 Based on: The Hobbit by J.R.R. Tolkien
                                 Starring: Martin Freeman, Ian McKellen, Richard Armitage, Cate Blanchett
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/2149946317.jpg" alt="">
@@ -296,7 +342,7 @@
                                 Language: German
                                 Platform: Netflix
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754698100075.jpg" alt="">
@@ -306,14 +352,14 @@
                                 Directed by: Joe Johnston
                                 Starring: Chris Evans, Hayley Atwell, Hugo Weaving, Tommy Lee Jones, Sebastian Stan
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                     </div>
                     <i class="fas fa-chevron-right arrow"></i>
                 </div>
             </div>
             <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
+                <h1 class="movie-list-title">ACTION/SCI-FI/HORROR</h1>
                 <div class="movie-list-wrapper">
                     <div class="movie-list">
                         <div class="movie-list-item">
@@ -324,7 +370,7 @@
                                 Directed by: Brad Peyton
                                 Starring: Dwayne Johnson, Naomie Harris, Jeffrey Dean Morgan, Malin Akerman
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/8.jpg" alt="">
@@ -334,7 +380,7 @@
                                 Directed by: Joseph Kosinski
                                 Starring: Tom Cruise, Morgan Freeman, Olga Kurylenko, Andrea Riseborough, Melissa Leo
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/5.jpg" alt="">
@@ -344,7 +390,7 @@
                                 Directed by: Joss Whedon
                                 Starring: Robert Downey Jr.,Chris Evans,Scarlett Johansson,Chris Hemsworth,Samuel L. Jackson
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754700094155.jpg" alt="">
@@ -354,7 +400,7 @@
                                 Directed by: Lee Cronin
                                 Starring: Lily Sullivan, Alyssa Sutherland, Morgan Davies, Gabrielle Echols, Nell Fisher
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754698100075.jpg" alt="">
@@ -364,7 +410,7 @@
                                 Directed by: Joe Johnston
                                 Starring: Chris Evans, Hayley Atwell, Hugo Weaving, Tommy Lee Jones, Sebastian Stan
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754698100176.jpg" alt="">
@@ -374,7 +420,7 @@
                                 Directed by: Sam Raimi
                                 Starring: Tobey Maguire, Kirsten Dunst, Willem Dafoe, James Franco
                             </p>
-                            <button class="movie-list-item-button">Watch</button>
+                            <button class="movie-list-item-button" data-id="${movie.imdbID}">Watch</button>
                         </div>
                         <div class="movie-list-item">
                             <img class="movie-list-item-img" src="images/instagram-1754698100277.jpg" alt="">
@@ -390,6 +436,37 @@
                     <i class="fas fa-chevron-right arrow"></i>
                 </div>
             </div>
+                
+            <section id="users-section" style="padding: 50px; text-align: center;">
+                <h2>Users Online</h2>
+                <p id="user-count">123+</p>
+            </section>
+
+            <div class="footerdivider" style="width: 100%; height: 1px; background-color: whitesmoke;"></div>
+
+            <!-- Footer Section -->
+            <footer class="footer">
+                <div class="footer-container">
+                    <p>© 2025 MovieRec. All Rights Reserved.</p>
+                    <p>Designed & Developed by <strong>Osita Eze</strong></p>
+                    <div class="footer-socials">
+                    <a href="https://www.facebook.com/share/1BJzeV3k5n/" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://x.com/EzeIsra94325268?t=W2RpDOTIofHZGp385ZFGgQ&s=09" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/ko_b_bie?igsh=a3lpcG9hYW1qeHB1" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@OsitaIsrael-e1j" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                    </div>
+                </div>
+            </footer>
+
+
         </div>
     </div>
 

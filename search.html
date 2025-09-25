@@ -1,21 +1,24 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Movie Search</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Prevent description overflow */
-    .movie-card p {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+    /* Sticky Back Button */
+    #backButton {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 10px 20px;
+      margin-bottom: 20px;
+      background: #365486;
+      color: white;
+      border: none;
+      border-radius: 5px;
       font-size: 14px;
-      color: #ccc;
-      margin-top: 5px;
+      cursor: pointer;
     }
 
     /* Movie card layout */
@@ -28,6 +31,29 @@
       background: #222;
       border-radius: 8px;
       color: white;
+    }
+
+    .movie-card h3 {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+
+    .movie-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    /* Prevent description overflow */
+    .movie-card p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 5px;
     }
 
     /* Favorite icon */
@@ -48,12 +74,19 @@
     #favorites {
       margin-top: 30px;
       padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
 
     #favoritesHeader {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     #clearFavorites {
@@ -64,10 +97,96 @@
       color: white;
       border: none;
       border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    .watch-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background-color: tomato;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    /* Video player container */
+    .player-container {
+      margin-top: 10px;
+      background-color: #333;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .player-container h4 {
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .player-container video {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    /* ===== MOBILE STYLING ===== */
+    @media only screen and (max-width: 600px) {
+      #backButton {
+        width: 100%;
+        font-size: 12px;
+        padding: 8px 0;
+      }
+
+      .movie-card {
+        width: 140px;
+        padding: 8px;
+        margin: 5px;
+      }
+
+      .movie-card h3 {
+        font-size: 14px;
+      }
+
+      .movie-card p {
+        font-size: 12px;
+      }
+
+      .watch-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+
+      #favorites {
+        gap: 8px;
+      }
+
+      #favoritesHeader {
+        font-size: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #clearFavorites {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+
+      .player-container h4 {
+        font-size: 12px;
+      }
+
+      .player-container {
+        padding: 6px;
+      }
     }
   </style>
 </head>
 <body id="bodyStyle" class="bodyStyle">
+
+  <!-- Sticky Back Button -->
+  <button id="backButton" onclick="history.back()">← Back</button>
 
   <h2>Search Results</h2>
   <div id="results"></div>
@@ -101,13 +220,11 @@
           const resultsDiv = document.getElementById('results');
           if (data.Response === 'True') {
             data.Search.forEach((movie, index) => {
-              // For each search result, fetch full details
               fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.imdbID}&plot=short`)
                 .then(res => res.json())
                 .then(details => {
                   const card = document.createElement('div');
                   card.classList.add('movie-card');
-
                   card.innerHTML = `
                     <span class="favorite-icon" onclick="toggleFavorite('${details.imdbID}', this)">&#9733;</span>
                     <h3>${details.Title} (${details.Year})</h3>
@@ -136,17 +253,8 @@
       player.style.display = player.style.display === 'none' ? 'block' : 'none';
     }
 
-    function showPlayer(title) {
-      document.getElementById('playerTitle').textContent = `Now Playing: ${title}`;
-      document.getElementById('playerContainer').style.display = 'block';
-    }
-
-    // ======================
-    // Favorites Functionality
-    // ======================
     function toggleFavorite(imdbID, el) {
       let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
       if (favorites.includes(imdbID)) {
         favorites = favorites.filter(id => id !== imdbID);
         el.classList.remove('active');
@@ -154,7 +262,6 @@
         favorites.push(imdbID);
         el.classList.add('active');
       }
-
       localStorage.setItem('favorites', JSON.stringify(favorites));
       renderFavorites();
     }
@@ -163,14 +270,12 @@
       const favoritesDiv = document.getElementById('favorites');
       favoritesDiv.innerHTML = '';
       const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
       favorites.forEach((id, index) => {
         fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${id}&plot=short`)
           .then(res => res.json())
           .then(details => {
             const card = document.createElement('div');
             card.classList.add('movie-card');
-
             card.innerHTML = `
               <span class="favorite-icon active" onclick="toggleFavorite('${details.imdbID}', this)">&#9733;</span>
               <h3>${details.Title} (${details.Year})</h3>
@@ -190,13 +295,11 @@
       });
     }
 
-    // Clear favorites
     document.getElementById('clearFavorites').addEventListener('click', () => {
       localStorage.removeItem('favorites');
       renderFavorites();
     });
 
-    // Load favorites on page load
     document.addEventListener('DOMContentLoaded', renderFavorites);
   </script>
 
